@@ -1,0 +1,14 @@
+# Node modules
+node_modules/
+
+# WhatsApp session auth data
+auth_info_baileys/
+
+# Uploaded media & contact files
+uploads/*
+!uploads/.gitkeep
+
+# Environment & Logs
+*.log
+.env
+.DS_Store

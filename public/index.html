@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebDev Outreach - WhatsApp Client Acquisition Hub</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+  
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="dark-theme">
+
+  <!-- Top Navigation Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand-identity">
+        <div class="brand-icon">
+          <i data-lucide="code-2"></i>
+        </div>
+        <div class="brand-text">
+          <h1>WEBDEV <span class="badge-pro">OUTREACH HUB</span></h1>
+          <p>WhatsApp Client Acquisition & Cold Pitch Engine</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <div class="mode-badge" id="modeBadge">
+          <span class="mode-dot"></span>
+          <span id="modeText">Demo Simulation Active</span>
+          <button class="btn-sm btn-outline" id="toggleModeBtn" onclick="toggleDemoMode()">Switch Mode</button>
+        </div>
+
+        <div class="connection-status disconnected" id="connectionBadge">
+          <i data-lucide="wifi-off" id="connIcon"></i>
+          <span id="connText">Disconnected</span>
+        </div>
+
+        <button class="btn btn-primary" id="connectWaBtn" onclick="openQrModal()">
+          <i data-lucide="qr-code"></i> Connect WhatsApp
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Layout -->
+  <main class="main-layout">
+    <aside class="sidebar">
+      <nav class="nav-menu">
+        <button class="nav-item active" data-tab="dashboard">
+          <i data-lucide="layout-dashboard"></i>
+          <span>Dashboard</span>
+        </button>
+        <button class="nav-item" data-tab="leads">
+          <i data-lucide="users-round"></i>
+          <span>Client Leads</span>
+          <span class="pill-count" id="leadsPillCount">0</span>
+        </button>
+        <button class="nav-item" data-tab="composer">
+          <i data-lucide="send"></i>
+          <span>New Pitch Campaign</span>
+        </button>
+        <button class="nav-item" data-tab="templates">
+          <i data-lucide="file-code-2"></i>
+          <span>Web Dev Templates</span>
+        </button>
+        <button class="nav-item" data-tab="antiban">
+          <i data-lucide="shield-check"></i>
+          <span>Anti-Ban Settings</span>
+        </button>
+        <button class="nav-item" data-tab="logs">
+          <i data-lucide="history"></i>
+          <span>Pitch Logs</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-widget">
+        <div class="widget-header">
+          <i data-lucide="zap"></i>
+          <h4>Pitch Conversion Radar</h4>
+        </div>
+        <div class="safety-meter">
+          <div class="meter-bar"><div class="meter-fill" style="width: 88%;"></div></div>
+          <span class="meter-label">88% Response Protection</span>
+        </div>
+        <p class="widget-note">Dynamic Spintax & Spacing Active</p>
+      </div>
+    </aside>
+
+    <section class="workspace">
+      <!-- DASHBOARD TAB -->
+      <div class="tab-page active" id="tab-dashboard">
+        <div class="page-header">
+          <h2>Outreach Performance Overview</h2>
+          <p>Real-time campaign metrics, website sales pitches, and lead response tracking.</p>
+        </div>
+
+        <div class="metrics-grid">
+          <div class="metric-card purple">
+            <div class="metric-icon"><i data-lucide="building"></i></div>
+            <div class="metric-info">
+              <span class="metric-title">Target Business Leads</span>
+              <h3 id="statTotalLeads">0</h3>
+              <span class="metric-sub">Imported for outreach</span>
+            </div>
+          </div>
+
+          <div class="metric-card emerald">
+            <div class="metric-icon"><i data-lucide="send-horizontal"></i></div>
+            <div class="metric-info">
+              <span class="metric-title">Pitches Sent</span>
+              <h3 id="statSent">0</h3>
+              <span class="metric-sub text-success" id="statSuccessPercent">0% Success</span>
+            </div>
+          </div>
+
+          <div class="metric-card rose">
+            <div class="metric-icon"><i data-lucide="alert-triangle"></i></div>
+            <div class="metric-info">
+              <span class="metric-title">Failed / Skipped</span>
+              <h3 id="statFailed">0</h3>
+              <span class="metric-sub text-danger">Invalid number or error</span>
+            </div>
+          </div>
+
+          <div class="metric-card cyan">
+            <div class="metric-icon"><i data-lucide="timer"></i></div>
+            <div class="metric-info">
+              <span class="metric-title">Pitches Remaining</span>
+              <h3 id="statRemaining">0</h3>
+              <span class="metric-sub">In current queue</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card campaign-monitor-card">
+          <div class="card-header">
+            <div class="header-title">
+              <i data-lucide="activity"></i>
+              <h3 id="campaignTitle">No Outreach Campaign Running</h3>
+            </div>
+            <div class="campaign-controls">
+              <button class="btn btn-sm btn-success" id="resumeCampBtn" onclick="resumeCampaign()" style="display:none;">
+                <i data-lucide="play"></i> Resume
+              </button>
+              <button class="btn btn-sm btn-warning" id="pauseCampBtn" onclick="pauseCampaign()" style="display:none;">
+                <i data-lucide="pause"></i> Pause
+              </button>
+              <button class="btn btn-sm btn-danger" id="cancelCampBtn" onclick="cancelCampaign()" style="display:none;">
+                <i data-lucide="square"></i> Stop
+              </button>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <div class="progress-container">
+              <div class="progress-labels">
+                <span id="progressText">0 / 0 Pitches Delivered</span>
+                <span id="progressPercent">0%</span>
+              </div>
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progressBarFill" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <div class="dashboard-split">
+              <div class="chart-box">
+                <canvas id="campaignChart"></canvas>
+              </div>
+              <div class="live-stream-box">
+                <div class="stream-header">
+                  <h4><i data-lucide="radio"></i> Live Pitch Stream</h4>
+                  <span class="live-indicator">LIVE</span>
+                </div>
+                <div class="stream-list" id="dashboardLiveLogs">
+                  <div class="empty-stream">No outreach campaign active yet. Launch a pitch to see live responses!</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LEADS TAB -->
+      <div class="tab-page" id="tab-leads">
+        <div class="page-header flex-between">
+          <div>
+            <h2>Business Leads Directory</h2>
+            <p>Upload CSV/Excel leads list of businesses needing websites.</p>
+          </div>
+          <div class="action-buttons">
+            <button class="btn btn-secondary" onclick="loadSampleLeads()">
+              <i data-lucide="sparkles"></i> Load Sample WebDev Leads
+            </button>
+            <label class="btn btn-primary file-upload-label">
+              <i data-lucide="upload-cloud"></i> Upload CSV / XLSX
+              <input type="file" id="leadFileInput" accept=".csv, .xlsx, .xls" onchange="handleFileUpload(event)">
+            </label>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header flex-between">
+            <div class="search-box">
+              <i data-lucide="search"></i>
+              <input type="text" id="leadSearch" placeholder="Search by business name, niche or phone..." oninput="renderLeadsTable()">
+            </div>
+            <div class="table-summary">
+              Total Leads Loaded: <strong id="leadCountBadge">0</strong>
+            </div>
+          </div>
+
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="data-table" id="leadsTable">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Business Name</th>
+                    <th>Contact Person</th>
+                    <th>WhatsApp Phone</th>
+                    <th>Business Niche</th>
+                    <th>Current Website Status</th>
+                    <th>Offer Price</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="leadsTbody">
+                  <tr>
+                    <td colspan="8" class="text-center empty-table">
+                      <i data-lucide="file-warning"></i>
+                      <p>No business leads loaded. Upload a CSV file or click "Load Sample WebDev Leads" to test.</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NEW CAMPAIGN TAB -->
+      <div class="tab-page" id="tab-composer">
+        <div class="page-header">
+          <h2>Create Client Outreach Campaign</h2>
+          <p>Compose personalized website sale pitches & attach portfolio mockups.</p>
+        </div>
+
+        <div class="composer-grid">
+          <div class="composer-form-card card">
+            <div class="card-body">
+              <div class="form-group">
+                <label>Campaign Name</label>
+                <input type="text" id="campNameInput" class="form-control" value="Local Business Website Outreach Campaign">
+              </div>
+
+              <div class="form-group">
+                <label>Insert Dynamic Lead Variables</label>
+                <div class="variable-chips">
+                  <button class="chip" onclick="insertVariable('{BusinessName}')">{BusinessName}</button>
+                  <button class="chip" onclick="insertVariable('{ContactName}')">{ContactName}</button>
+                  <button class="chip" onclick="insertVariable('{Niche}')">{Niche}</button>
+                  <button class="chip" onclick="insertVariable('{CurrentSite}')">{CurrentSite}</button>
+                  <button class="chip" onclick="insertVariable('{OfferPrice}')">{OfferPrice}</button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Anti-Ban Spintax Greetings</label>
+                <div class="spintax-chip-group">
+                  <button class="chip spintax-chip" onclick="insertVariable('{{Hi|Hello|Hey|Greetings}}')">Greeting Spintax</button>
+                  <button class="chip spintax-chip" onclick="insertVariable('{{Reply DEMO|Reply YES|Let me know}}')">Call To Action Spintax</button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Website Sales Pitch Message Template</label>
+                <textarea id="messageTemplateInput" class="form-control code-textarea" rows="8" placeholder="Type your website sales message here..." oninput="updateLivePreview()"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label>Attach Portfolio / PDF Proposal Mockup</label>
+                <div class="media-upload-box" id="mediaDropzone">
+                  <input type="file" id="mediaFileInput" accept="image/*,.pdf" onchange="handleMediaUpload(event)">
+                  <i data-lucide="image"></i>
+                  <span id="mediaFileName">Click to attach portfolio screenshot or proposal PDF</span>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button class="btn btn-primary btn-lg btn-block" onclick="launchCampaign()">
+                  <i data-lucide="send"></i> Send Bulk Website Pitches Now
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="phone-preview-card">
+            <div class="phone-mockup">
+              <div class="phone-header">
+                <div class="phone-speaker"></div>
+                <div class="phone-camera"></div>
+              </div>
+              <div class="wa-chat-header">
+                <div class="wa-avatar">
+                  <i data-lucide="laptop"></i>
+                </div>
+                <div class="wa-contact-info">
+                  <h4>Web Developer Outreach</h4>
+                  <span>Online • Professional Portfolio</span>
+                </div>
+              </div>
+              <div class="wa-chat-body" id="previewChatBody">
+                <div class="wa-message-bubble incoming">
+                  <p id="previewText">Your personalized website pitch message preview will appear here in real-time...</p>
+                  <span class="wa-time">10:30 AM <i data-lucide="check-check"></i></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLINIC TEMPLATES TAB -->
+      <div class="tab-page" id="tab-templates">
+        <div class="page-header">
+          <h2>High-Converting Web Development Pitch Templates</h2>
+          <p>Battle-tested sales pitch scripts for acquiring website clients.</p>
+        </div>
+
+        <div class="templates-grid" id="templatesGrid"></div>
+      </div>
+
+      <!-- ANTI-BAN SETTINGS TAB -->
+      <div class="tab-page" id="tab-antiban">
+        <div class="page-header">
+          <h2>Anti-Ban Engine Settings</h2>
+          <p>Smart delay settings to keep your personal & business WhatsApp account 100% safe.</p>
+        </div>
+
+        <div class="card max-w-2xl">
+          <div class="card-body">
+            <div class="safety-banner">
+              <i data-lucide="shield-check"></i>
+              <div>
+                <h4>Anti-Ban Protection Active</h4>
+                <p>Randomized 5 to 15 seconds delays between messages prevent WhatsApp spam flags.</p>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Min Delay (Seconds)</label>
+              <input type="number" id="minDelayInput" class="form-control" value="5" min="2" max="30">
+            </div>
+
+            <div class="form-group">
+              <label>Max Delay (Seconds)</label>
+              <input type="number" id="maxDelayInput" class="form-control" value="12" min="5" max="60">
+            </div>
+
+            <button class="btn btn-primary" onclick="alert('Safety settings updated!')">
+              <i data-lucide="save"></i> Save Settings
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SENDING LOGS TAB -->
+      <div class="tab-page" id="tab-logs">
+        <div class="page-header flex-between">
+          <div>
+            <h2>Pitch Execution Logs</h2>
+            <p>Detailed log timeline of sent website pitches.</p>
+          </div>
+          <button class="btn btn-secondary" onclick="alert('Exporting CSV...')">
+            <i data-lucide="download"></i> Export Pitch Logs
+          </button>
+        </div>
+
+        <div class="card">
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Time</th>
+                    <th>Business Name</th>
+                    <th>Phone</th>
+                    <th>Status</th>
+                    <th>Pitch Snippet</th>
+                  </tr>
+                </thead>
+                <tbody id="logsTableBody">
+                  <tr>
+                    <td colspan="5" class="text-center empty-table">No pitch logs available yet.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- QR Code Modal -->
+  <div class="modal-overlay" id="qrModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3><i data-lucide="qr-code"></i> Scan WhatsApp QR Code</h3>
+        <button class="modal-close" onclick="closeQrModal()">&times;</button>
+      </div>
+      <div class="modal-body text-center">
+        <div class="qr-container" id="qrContainer">
+          <div class="qr-spinner">
+            <i data-lucide="loader-2" class="spin"></i>
+            <p>Generating WhatsApp QR Code...</p>
+          </div>
+        </div>
+        <div class="qr-instructions">
+          <ol>
+            <li>Open **WhatsApp** on your phone.</li>
+            <li>Tap **Linked Devices** -> **Link a Device**.</li>
+            <li>Scan the QR code to connect your account.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
