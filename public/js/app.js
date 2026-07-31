@@ -98,19 +98,36 @@ function closeQrModal() {
   document.getElementById('qrModal').classList.remove('active');
 }
 
+function parseCSVLine(line) {
+  const result = [];
+  let current = '';
+  let inQuotes = false;
+
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i];
+    if (char === '"') {
+      inQuotes = !inQuotes;
+    } else if (char === ',' && !inQuotes) {
+      result.push(current.trim().replace(/^"|"$/g, ''));
+      current = '';
+    } else {
+      current += char;
+    }
+  }
+  result.push(current.trim().replace(/^"|"$/g, ''));
+  return result;
+}
+
 async function loadSampleLeads() {
   try {
     const res = await fetch('/sample_webdev_leads.csv');
     const text = await res.text();
     const lines = text.trim().split('\n');
-    const headers = lines[0].split(',').map(h => h.replace(/^"|"$/g, '').trim());
     
     loadedLeads = [];
     for (let i = 1; i < lines.length; i++) {
       if (!lines[i].trim()) continue;
-      // CSV Line Regex Split
-      const row = lines[i].match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || lines[i].split(',');
-      const cleanRow = row.map(r => r.replace(/^"|"$/g, '').trim());
+      const cleanRow = parseCSVLine(lines[i]);
       
       const bizName = cleanRow[0] || 'Business';
       const category = cleanRow[1] || 'Services';
@@ -118,28 +135,33 @@ async function loadSampleLeads() {
       const address = cleanRow[3] || '';
       const phoneRaw = cleanRow[4] || cleanRow[cleanRow.length - 1] || '';
       
-      const formattedPhone = phoneRaw.replace(/\D/g, '');
+      let formattedPhone = phoneRaw.replace(/\D/g, '');
+      if (formattedPhone.length === 10) {
+        formattedPhone = '91' + formattedPhone;
+      }
 
-      loadedLeads.push({
-        BusinessName: bizName,
-        ContactName: 'Business Owner',
-        Phone: phoneRaw,
-        FormattedPhone: formattedPhone.length === 10 ? '91' + formattedPhone : formattedPhone,
-        Niche: category,
-        City: city,
-        Address: address,
-        CurrentSite: 'Needs Website',
-        OfferPrice: '4999'
-      });
+      if (formattedPhone.length >= 10) {
+        loadedLeads.push({
+          BusinessName: bizName,
+          ContactName: 'Business Owner',
+          Phone: phoneRaw,
+          FormattedPhone: formattedPhone,
+          Niche: category,
+          City: city,
+          Address: address,
+          CurrentSite: 'Needs Website',
+          OfferPrice: '4999'
+        });
+      }
     }
 
     renderLeadsTable();
     updateMetrics();
-    alert(`Loaded ${loadedLeads.length} real business leads (Realtors, Salons, Immigration, Gyms)!`);
   } catch (err) {
     console.error('Error loading CSV leads:', err);
   }
 }
+
 
 
 async function handleFileUpload(event) {
