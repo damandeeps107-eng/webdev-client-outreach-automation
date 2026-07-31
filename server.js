@@ -106,13 +106,21 @@ async function initWhatsAppSession() {
       }
 
       if (connection === 'close') {
-        const shouldReconnect = lastDisconnect?.error?.output?.statusCode !== DisconnectReason.loggedOut;
+        const statusCode = lastDisconnect?.error?.output?.statusCode;
+        const isLoggedOut = statusCode === DisconnectReason.loggedOut || statusCode === 401;
+        
         waState.status = 'disconnected';
         waState.qrCodeUrl = null;
+        waState.userPhone = null;
         io.emit('wa:status', waState);
-        
-        if (shouldReconnect) {
-          setTimeout(initWhatsAppSession, 5000);
+
+        if (isLoggedOut) {
+          console.log('Session logged out or device removed. Clearing auth cache...');
+          if (fs.existsSync(authDir)) {
+            fs.rmSync(authDir, { recursive: true, force: true });
+          }
+        } else {
+          setTimeout(initWhatsAppSession, 3000);
         }
       }
     });
@@ -163,16 +171,25 @@ app.post('/api/connect-wa', async (req, res) => {
   }
 });
 
-app.post('/api/disconnect-wa', (req, res) => {
+app.post('/api/reset-session', (req, res) => {
   if (sock) {
     try { sock.end(); } catch (e) {}
     sock = null;
+  }
+  const authDir = path.join(__dirname, 'auth_info_baileys');
+  if (fs.existsSync(authDir)) {
+    fs.rmSync(authDir, { recursive: true, force: true });
   }
   waState.status = 'disconnected';
   waState.qrCodeUrl = null;
   waState.userPhone = null;
   io.emit('wa:status', waState);
-  res.json({ success: true });
+
+  setTimeout(() => {
+    initWhatsAppSession();
+  }, 1000);
+
+  res.json({ success: true, message: 'Session reset. Generating fresh QR code...' });
 });
 
 app.post('/api/toggle-demo', (req, res) => {

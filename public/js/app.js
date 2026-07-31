@@ -94,6 +94,18 @@ function openQrModal() {
   fetch('/api/connect-wa', { method: 'POST' });
 }
 
+async function resetAndGetFreshQr() {
+  const qrContainer = document.getElementById('qrContainer');
+  qrContainer.innerHTML = `
+    <div class="qr-spinner">
+      <i data-lucide="loader-2" class="spin"></i>
+      <p>Clearing old session & generating FRESH QR Code...</p>
+    </div>
+  `;
+  lucide.createIcons();
+  await fetch('/api/reset-session', { method: 'POST' });
+}
+
 function closeQrModal() {
   document.getElementById('qrModal').classList.remove('active');
 }
