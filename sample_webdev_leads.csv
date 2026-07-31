@@ -1,8 +1,41 @@
-BusinessName,ContactName,Phone,Niche,CurrentSite,OfferPrice
-Apex Fitness Gym,Rahul Verma,919876543210,Fitness & Gym,No Website,4999
-Urban Bite Cafe,Priya Sharma,919812345678,Restaurant & Cafe,Outdated Site,5999
-Luxe Salon & Spa,Sneha Kapoor,919988776655,Beauty & Salon,No Website,3999
-Nexora Real Estate,Vikram Singh,919711223344,Real Estate,Slow Mobile Site,7999
-FitLife Diagnostics,Dr. Amit Patel,919899001122,Healthcare Clinic,No Website,6999
-Grand Hotel & Suites,Rohan Mehta,919654321098,Hospitality,Outdated Site,8999
-Elite Law Associates,Ananya Roy,919543210987,Legal Services,No Website,5999
+Business Name,Category,City,Address,Phone Number
+Big Time Realtors,Realtor,Ludhiana,"Office no. 13, Upper Ground floor, Novelty Plaza, Ferozepur Rd, Ghumar Mandi, Ludhiana, Punjab 141001",+91 90414 57000
+Verma Properties,Realtor,Ludhiana,"1, 100, Lodhi Club Rd, J Block, Housing Board Colony, Ludhiana, Punjab 141012",+91 83607 88152
+Monga Properties,Realtor,Ludhiana,"3rd Floor, 3325, Ferozepur Rd, Gurdev Nagar, Ludhiana, Punjab 141001",+91 98728 88455
+Bhagat Ram & Sons Realtors,Realtor,Ludhiana,"3455 Sector 32A, AIPL Dreamcity, South City, Ludhiana, Punjab 141010",+91 98150 22000
+Real Estate Bhagat Singh Properties,Realtor,Ludhiana,"Chandigarh Rd, Sector 32A, Ludhiana, Punjab 141008",+91 87000 07015
+Swastik Homes Real Estate,Realtor,Jaipur,"B-2/26 Chitrakoot Scheme, Gandhi Path Rd, Vaishali Nagar, Jaipur, Rajasthan 302021",+91 94140 63100
+Shubhkamna Properties Pvt. Ltd.,Realtor,Jaipur,"Shop No 16-17, Panchsheel Market, Ajmer Rd, Jaipur, Rajasthan 302019",+91 93140 54348
+Search Abode Pvt. Ltd.,Realtor,Jaipur,"Plot no. D 7, Patrakar Colony Main Rd, Mansarovar, Jaipur, Rajasthan 302020",+91 90019 12411
+Rerise Realtors,Realtor,Jaipur,"189/G1, Kanak Vrindavan Township, Sirsi Rd, Vaishali Nagar, Jaipur, Rajasthan 302034",+91 96105 32600
+CMK Properties & To-let Services,Realtor,Jaipur,"G-3, Subash Nagar Shopping Centre, Shastri Nagar, Jaipur, Rajasthan 302016",+91 93148 78056
+Cuts and Curves,Salon,Lucknow,"Basement Community Centre, Aishbagh Rd, Rajendra Nagar, Lucknow, UP 226004",+91 90440 41213
+Lakme Salon Apex Tower,Salon,Lucknow,"Ground Floor, Apex Tower, Habibullah Street, Hazratganj, Lucknow, UP 226001",+91 63912 93666
+KNK Awadh Salon & Academy,Salon,Lucknow,"02/01, Vipul Khand 2, Gomti Nagar, Lucknow, UP 226010",+91 88810 00551
+Neha Tripathi Salon Dalibagh,Salon,Lucknow,"11 B Tilak Marg, Butler Rd, Dalibagh Colony, Lucknow, UP 226001",+91 83033 42481
+Laska Unisex Salon,Salon,Lucknow,"2/83, Patrakarpuram Crossing Rd, Gomti Nagar, Lucknow, UP 226010",+91 96953 90002
+Femina Plus Luxe Salon,Salon,Chandigarh,"SCO 164-165, 9C, Sector 9, Chandigarh 160009",+91 79732 68966
+Lakme Salon Sector 35D,Salon,Chandigarh,"Ground Floor, SCO 285, Market 35 D, Sector 35, Chandigarh 160022",+91 82911 58339
+Runway Salon De Paris,Salon,Chandigarh,"SCO 283, Market 35 D, Sector 35, Chandigarh 160022",+91 98884 21442
+Avalon Unisex Salon,Salon,Chandigarh,"First Floor, SCO-29, Sector 21C, Chandigarh 160022",+91 79861 90972
+Priyanka Beauty Parlour,Salon,Chandigarh,"399 Ground Floor, Sector 20A, Chandigarh 160020",+91 94174 97748
+Skybird International,Immigration Consultant,Ludhiana,"First Floor, Hotel Chevron Building, Model Town, Ludhiana, Punjab 141002",+91 72720 25025
+JVT Immigration Consultant,Immigration Consultant,Ludhiana,"SCO 27, 1st Floor, Feroze Gandhi Market Rd, Ludhiana, Punjab 141001",+91 95639 95639
+Focus Immigration Services,Immigration Consultant,Ludhiana,"5th Floor, Nego Complex, Pakhowal Rd, Gurdev Nagar, Ludhiana, Punjab 141001",+91 74010 74012
+Everest Abroad Services Pvt. Ltd.,Immigration Consultant,Ludhiana,"Building No. 4, 3rd Floor, Unique Tower, Pakhowal Rd, Ludhiana, Punjab 141001",+91 95555 56789
+BSBW Career Builders,Immigration Consultant,Ludhiana,"Green Field, Sarabha Nagar, Ludhiana, Punjab 141002",+91 98759 10075
+Eduland Immigration Pvt. Ltd.,Immigration Consultant,Chandigarh,"SCO 81, Sector 40C, Chandigarh 160036",+91 1800 137 5588
+Global Migration Experts,Immigration Consultant,Chandigarh,"Second Floor, SCO 339-340, Sector 35B, Chandigarh 160022",+91 76268 05222
+Roshan Visa Consultancy Services,Immigration Consultant,Chandigarh,"1st Floor, SCO 100-101, Sector 34A, Chandigarh 160022",+91 98765 16844
+Sea Pebbles Immigration,Immigration Consultant,Chandigarh,"SCO 485-86, 2nd Floor, Sector 35C, Chandigarh 160022",+91 89681 00047
+WD Immigration Consultants,Immigration Consultant,Chandigarh,"SCO 13-14-15, 3rd Floor, Sector 34A, Chandigarh 160022",+91 93973 93973
+Infinity Fitness Gym,Gym,Ahmedabad,"2nd Floor, Centrum Heights, Chandlodiya Rd, Naranpura, Ahmedabad, Gujarat 380013",+91 96248 82555
+Ultimate Fitness Club,Gym,Ahmedabad,"Shanay, 1, IIM Rd, University Area, Ahmedabad, Gujarat 380015",+91 81280 61908
+Lifeline Fitness Gym,Gym,Ahmedabad,"5th Floor, Avadh Pride, Vastral, Ahmedabad, Gujarat 382418",+91 99047 73377
+Infinity Fitness Gym 24x7,Gym,Ahmedabad,"2nd Floor, Heritage Plaza, Bodakdev, Ahmedabad, Gujarat 380054",+91 96010 95005
+Tycoon Fitness Gym,Gym,Ahmedabad,"6th Floor, Hotel New City Gate, Vasna, Ahmedabad, Gujarat 380055",+91 98983 05522
+O2 Oxygen Gym,Gym,Jaipur,"Narayan Tower, Ramnagaria Ext A-Block, Jagatpura, Jaipur, Rajasthan 302017",+91 74268 07466
+Jaipur Fitness Gym,Gym,Jaipur,"40, NH-8 Bypass Rd, Gulzar Colony, Lal Dungri, Jaipur, Rajasthan 302002",+91 88899 99076
+Lifetime Fitness Club,Gym,Jaipur,"3rd Floor, V Cube, Malviya Nagar, Jaipur, Rajasthan 302017",+91 99505 50885
+Sky Fitness Ajmer Road,Gym,Jaipur,"1st Floor, ML Tower, Gopalpura Bypass Rd, Mansarovar, Jaipur, Rajasthan 302020",+91 75687 98310
+Sky Fitness Mangyawas,Gym,Jaipur,"Maharani Garden Road, Mansarover, Rajat Path, Jaipur, Rajasthan 302020",+91 95880 37686

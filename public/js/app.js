@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initChart();
   fetchInitialState();
   fetchTemplates();
+  loadSampleLeads();
 
   socket.on('wa:status', updateWaStatusUI);
   socket.on('wa:qr', updateQrUI);
@@ -97,21 +98,49 @@ function closeQrModal() {
   document.getElementById('qrModal').classList.remove('active');
 }
 
-function loadSampleLeads() {
-  loadedLeads = [
-    { BusinessName: 'Apex Fitness Gym', ContactName: 'Rahul Verma', Phone: '919876543210', FormattedPhone: '919876543210', Niche: 'Fitness & Gym', CurrentSite: 'No Website', OfferPrice: '4999' },
-    { BusinessName: 'Urban Bite Cafe', ContactName: 'Priya Sharma', Phone: '919812345678', FormattedPhone: '919812345678', Niche: 'Restaurant & Cafe', CurrentSite: 'Outdated Site', OfferPrice: '5999' },
-    { BusinessName: 'Luxe Salon & Spa', ContactName: 'Sneha Kapoor', Phone: '919988776655', FormattedPhone: '919988776655', Niche: 'Beauty & Salon', CurrentSite: 'No Website', OfferPrice: '3999' },
-    { BusinessName: 'Nexora Real Estate', ContactName: 'Vikram Singh', Phone: '919711223344', FormattedPhone: '919711223344', Niche: 'Real Estate', CurrentSite: 'Slow Mobile Site', OfferPrice: '7999' },
-    { BusinessName: 'FitLife Diagnostics', ContactName: 'Dr. Amit Patel', Phone: '919899001122', FormattedPhone: '919899001122', Niche: 'Healthcare Clinic', CurrentSite: 'No Website', OfferPrice: '6999' },
-    { BusinessName: 'Grand Hotel & Suites', ContactName: 'Rohan Mehta', Phone: '919654321098', FormattedPhone: '919654321098', Niche: 'Hospitality', CurrentSite: 'Outdated Site', OfferPrice: '8999' },
-    { BusinessName: 'Elite Law Associates', ContactName: 'Ananya Roy', Phone: '919543210987', FormattedPhone: '919543210987', Niche: 'Legal Services', CurrentSite: 'No Website', OfferPrice: '5999' }
-  ];
+async function loadSampleLeads() {
+  try {
+    const res = await fetch('/sample_webdev_leads.csv');
+    const text = await res.text();
+    const lines = text.trim().split('\n');
+    const headers = lines[0].split(',').map(h => h.replace(/^"|"$/g, '').trim());
+    
+    loadedLeads = [];
+    for (let i = 1; i < lines.length; i++) {
+      if (!lines[i].trim()) continue;
+      // CSV Line Regex Split
+      const row = lines[i].match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || lines[i].split(',');
+      const cleanRow = row.map(r => r.replace(/^"|"$/g, '').trim());
+      
+      const bizName = cleanRow[0] || 'Business';
+      const category = cleanRow[1] || 'Services';
+      const city = cleanRow[2] || 'India';
+      const address = cleanRow[3] || '';
+      const phoneRaw = cleanRow[4] || cleanRow[cleanRow.length - 1] || '';
+      
+      const formattedPhone = phoneRaw.replace(/\D/g, '');
 
-  renderLeadsTable();
-  updateMetrics();
-  alert('Loaded 7 sample business leads for Web Developer Outreach!');
+      loadedLeads.push({
+        BusinessName: bizName,
+        ContactName: 'Business Owner',
+        Phone: phoneRaw,
+        FormattedPhone: formattedPhone.length === 10 ? '91' + formattedPhone : formattedPhone,
+        Niche: category,
+        City: city,
+        Address: address,
+        CurrentSite: 'Needs Website',
+        OfferPrice: '4999'
+      });
+    }
+
+    renderLeadsTable();
+    updateMetrics();
+    alert(`Loaded ${loadedLeads.length} real business leads (Realtors, Salons, Immigration, Gyms)!`);
+  } catch (err) {
+    console.error('Error loading CSV leads:', err);
+  }
 }
+
 
 async function handleFileUpload(event) {
   const file = event.target.files[0];
