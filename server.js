@@ -263,7 +263,7 @@ app.get('/api/templates', (req, res) => {
       id: 'new_website_pitch',
       name: '🌐 New Website Pitch (High Conversion)',
       category: 'Cold Lead Pitch',
-      template: '{{Hi|Hello|Hey}} {ContactName}!\n\nI noticed *{BusinessName}* doesn\'t have an official modern website yet to capture Google & WhatsApp customers.\n\nWe build modern, fast-loading, mobile-friendly websites for {Niche} businesses starting at flat *₹{OfferPrice}*.\n\nIncludes:\n✅ Google Maps SEO & WhatsApp Direct Chat\n✅ Fast Loading & Mobile Responsive\n✅ Free Domain & SSL Certificate\n\nReply *DEMO* and I will send a free sample layout preview for your business!'
+      template: '{{Hi|Hello|Hey}}!\n\nI noticed *{BusinessName}* in *{City}* doesn\'t have an official modern website yet to capture Google & WhatsApp customers.\n\nWe build modern, fast-loading, mobile-friendly websites for *{Niche}* businesses starting at flat *₹{OfferPrice}*.\n\nIncludes:\n✅ Google Maps SEO & WhatsApp Direct Chat\n✅ Fast Loading & Mobile Responsive\n✅ Free Domain & SSL Certificate\n\nReply *DEMO* and I will send a free sample layout preview for your business!'
     },
     {
       id: 'website_redesign',
